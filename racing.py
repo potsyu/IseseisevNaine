@@ -25,7 +25,7 @@ speedX = 1
 
 gameover = False
 while not gameover:
-    clock.tick(30)  
+    clock.tick(30)
     screen.blit(blue1, (posX,posY))
 
     posX += speedX
@@ -38,10 +38,8 @@ screen.blit(bg, [0,0])
 pygame.display.flip()
 
 #Kood, et ekraan automaatselt ei läheks kinni.
-running = True
-while running:
+
+while True:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
-      running = False
-    if running == False:
-      pygame.quit()
+      quit()
