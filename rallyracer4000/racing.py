@@ -30,23 +30,21 @@ RspeedY = 0 # initialize car speed
 gameover = False # initialize gameover flag
 BposX = random.randint(450, 460)  # initialize car position
 B2posX = random.randint(450, 460) # initialize 2nd car position
+Dpos=480
+Upos=0
 while not gameover: # while game is not over loop
     # fps
-    clock.tick(60) # set frame rate
+    screen.blit(f1_blue, (BposX, BposY))  # blit car image
+    screen.blit(f2_blue, (B2posX, B2posY))  # blit car image
+    BposY += BspeedY  # move car
+    B2posY += BspeedY + 1  # move car
+    pygame.display.flip()
+    clock.tick(60)  # set frame rate
     # quit game if window is closed
     for event in pygame.event.get(): # event handling loop
         if event.type == pygame.QUIT: # if window is closed
             sys.exit() # quit game
 
-    # pildi lisamine ekraanile
-    screen.blit(bg, (0, 0)) # blit background image
-    screen.blit(f1_blue, (BposX, BposY)) # blit car image
-    screen.blit(f2_blue, (B2posX, B2posY)) # blit car image
-    BposY += BspeedY # move car
-    B2posY += BspeedY+1 # move car
-
-# paneb backgroundi liiiikuma
-    pygame.display.flip()
     a = 1
     if a < 2:
         PosBGY1 += 3
@@ -63,7 +61,6 @@ while not gameover: # while game is not over loop
     screen.blit(f1_red, (RposX, RposY)) # blit car image
     RposY += RspeedY # move car
     screen.blit(pygame.font.Font(None, 30).render(f"Skoor: {Score}", True, [255, 255, 255]), [10, 460]) # score
-
     if BposY >= 480: # if car is out of screen
         BposY = -120 # reset car position
         Score += 1 # increase score
@@ -100,6 +97,16 @@ while not gameover: # while game is not over loop
     if time.time() % 10 == 0: # if time is divisible by 10
         BspeedY += 1 # increase speed by 1
 
+        # pildi lisamine ekraanile
+        screen.blit(bg, (0, 0))  # blit background image
+        screen.blit(f1_blue, (BposX, BposY))  # blit car image
+        screen.blit(f2_blue, (B2posX, B2posY))  # blit car image
+        BposY += BspeedY  # move car
+        B2posY += BspeedY + 1  # move car
+
+        # paneb backgroundi liiiikuma
+        pygame.display.flip()
+
     # show time elapsed on top right
 
     screen.blit(pygame.font.Font(None, 20).render(f"Aega Kulutatud: {int(time.time() - start_time)}", True, [255, 255, 255]), [519, 40]) # show time elapsed
@@ -110,7 +117,7 @@ while not gameover: # while game is not over loop
 
 
     pygame.display.flip() # update display
-gameoverbg= pygame.image.load("dog.jpg") # load gameover image
+gameoverbg= pygame.image.load("surm.jpg") # load gameover image
 # dont quit pygame unless you want to close the window
 while True: # endless loop for gameover scene
 
