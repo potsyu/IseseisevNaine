@@ -36,7 +36,7 @@ bg_rally_posY = 0  # bg position
 
 bg_rally2_posY = -480  # 2nd background position
 
-gameover = False # game running
+gameover = False  # game running
 while not gameover:
     clock.tick(60)  # appoints an fps mark
     events = pygame.event.get()
