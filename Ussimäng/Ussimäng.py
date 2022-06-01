@@ -6,8 +6,8 @@ Made with PyGame
 import random
 import sys
 import time
+
 import pygame
-from pygame.locals import *
 
 pygame.init()
 pygame.mixer.init()
@@ -29,7 +29,7 @@ pygame.mixer.music.play(-1)
 difficulty = 25
 
 # Window size
-frame_size_x = 720
+frame_size_x = 691
 frame_size_y = 480
 
 # Checks for errors encountered
@@ -93,8 +93,8 @@ def game_over():
 
 # Score
 def show_score(choice, color, font, size):
-    score_font = pygame.font.SysFont(font, size)
-    score_surface = score_font.render('Score : ' + str(score), True, color)
+    score_font = pygame.font.SysFont('Minecraft.ttf', 30)
+    score_surface = score_font.render('Score : ' + str(score), True, black)
     score_rect = score_surface.get_rect()
     if choice == 1:
         score_rect.midtop = (frame_size_x / 10, 15)
@@ -172,20 +172,13 @@ while True:
     # Snake food
     pygame.draw.rect(game_window, white, pygame.Rect(food_pos[0], food_pos[1], 10, 10))
 
-    game_window.blit(
-        pygame.font.Font(None, 20).render(f"Time elapsed: {int(time.time() - start_time)}", True, [255, 255, 255]),
-        [519, 40])  # show time elapsed
+    game_window.blit(pygame.font.Font('Minecraft.ttf', 22).render(f"Life Wasted: {int(time.time() - start_time)}", True, [0, 0, 0]), [520, 20])  # show time elapsed
     # Game Over conditions
     # Getting out of bounds
     if snake_pos[0] < 0 or snake_pos[0] > frame_size_x - 10:
         game_over()
     if snake_pos[1] < 0 or snake_pos[1] > frame_size_y - 10:
         game_over()
-    if game_over():
-        gameover = font.render("Press R to Respawn", False, (255, 255, 255))
-        rect = gameover.get_rect()
-        rect.center = screen.get_rect().center
-        screen.blit(gameover, rect)
     # Touching the snake body
     for block in snake_body[1:]:
         if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
