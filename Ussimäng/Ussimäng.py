@@ -30,6 +30,8 @@ difficulty = 25
 frame_size_x = 691
 frame_size_y = 480
 
+Paused = False
+
 # Checks for errors encountered
 check_errors = pygame.init()
 # pygame.init() example output -> (6, 0)
@@ -75,7 +77,7 @@ def game_over():
     game_over_rect.midtop = (frame_size_x / 2, frame_size_y / 4)
     game_window.fill(black)
     game_window.blit(game_over_surface, game_over_rect)
-    show_score(0, red, 'times', 20)
+    show_score(0)
     pygame.display.flip()
     pygame.mixer.quit()
     mp3_path = 'death.mp3'
@@ -90,7 +92,7 @@ def game_over():
 
 
 # Score
-def show_score(choice, color, font, size):
+def show_score(choice):
     score_font = pygame.font.SysFont('Minecraft.ttf', 30)
     score_surface = score_font.render('Score : ' + str(score), True, black)
     score_rect = score_surface.get_rect()
@@ -122,6 +124,26 @@ while True:
             # Esc -> Create event to quit the game
             if event.key == pygame.K_ESCAPE:
                 pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+            if event.key == pygame.K_e:
+                Paused = True
+
+    while Paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.event.post(pygame.event.Event(pygame.QUIT))
+                if event.key == pygame.K_e:
+                    Paused = False
+        my_font = pygame.font.SysFont('times new roman', 90)
+        paused_surface = my_font.render('Paused', True, red)
+        paused_rect = paused_surface.get_rect()
+        paused_rect.midtop = (frame_size_x / 2, frame_size_y / 4)
+        game_window.blit(paused_surface, paused_rect)
+        pygame.display.update()
 
     # Making sure the snake cannot move in the opposite direction instantaneously
     if change_to == 'UP' and direction != 'DOWN':
@@ -170,7 +192,9 @@ while True:
     # Snake food
     pygame.draw.rect(game_window, white, pygame.Rect(food_pos[0], food_pos[1], 10, 10))
 
-    game_window.blit(pygame.font.Font('Minecraft.ttf', 22).render(f"Life Wasted: {int(time.time() - start_time)}", True, [0, 0, 0]), [520, 20])  # show time elapsed
+    game_window.blit(
+        pygame.font.Font('Minecraft.ttf', 22).render(f"Life Wasted: {int(time.time() - start_time)}", True, [0, 0, 0]),
+        [520, 20])  # show time elapsed
     # Game Over conditions
     # Getting out of bounds
     if snake_pos[0] < 0 or snake_pos[0] > frame_size_x - 10:
@@ -182,7 +206,7 @@ while True:
         if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
             game_over()
 
-    show_score(1, white, 'consolas', 20)
+    show_score(1)
     # Refresh game screen
     pygame.display.update()
     # Refresh rate
