@@ -1,0 +1,8 @@
+Dokumentatsioon
+Björn Johanson
+
+Esimeseks valisin Pythondex'i Pac-Man mängu mis kasutab freegames püüton moodulit
+
+Teiseks valisin Github'ist hbokmann'i tehtud pac-man'i mängu.
+
+Viga : Sain aru et, kasutasin valet koodi, kuna Pythondex'i pacman ei kasutanud PyGame'i
