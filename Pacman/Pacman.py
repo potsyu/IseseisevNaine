@@ -1,9 +1,9 @@
 # Pacman in Python with PyGame
-# https://github.com/hbokmann/Pacman
 
 # Github 
 
 import pygame
+import time
 
 # loome värvid
 black = (0, 0, 0)
@@ -380,6 +380,7 @@ c_w = 303 + (32 - 16)  # Clyde width
 
 # Tehakse funktsioon, mis alustab mängu ja kus kõik kood käivitub
 def startGame():
+    start_time = time.time()
     all_sprites_list = pygame.sprite.RenderPlain()
 
     block_list = pygame.sprite.RenderPlain()
@@ -453,6 +454,8 @@ def startGame():
     score = 0
 
     done = False
+    gameover = False
+    cheat = False
 
     var = 0
 
@@ -460,7 +463,7 @@ def startGame():
         # Kõik nupu vajutused toimuvad siin, liikumine näiteks
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                done = True
+                quit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -471,14 +474,19 @@ def startGame():
                     Pacman.changespeed(0, -30)
                 if event.key == pygame.K_DOWN:
                     Pacman.changespeed(0, 30)
-                if event.key == pygame.K_w:
-                    Pacman.changespeed(0, -60)
-                if event.key == pygame.K_s:
-                    Pacman.changespeed(0, 60)
-                if event.key == pygame.K_a:
-                    Pacman.changespeed(-60, 0)
-                if event.key == pygame.K_d:
-                    Pacman.changespeed(60, 0)
+                # Cheatid
+                if event.key == pygame.K_w: #Kontrollib kas sa liigud tahteust kiiremini pmst
+                    Pacman.changespeed(0, -60) # Ja aktiveerib sohi
+                    cheat = True # ning muudab cheat variable True'ks
+                if event.key == pygame.K_s: #Kontrollib kas sa liigud tahteust kiiremini pmst
+                    Pacman.changespeed(0, 60)  # Ja aktiveerib sohi
+                    cheat = True # ning muudab cheat variable True'ks
+                if event.key == pygame.K_a: #Kontrollib kas sa liigud tahteust kiiremini pmst
+                    Pacman.changespeed(-60, 0) # Ja aktiveerib sohi
+                    cheat = True # ning muudab cheat variable True'ks
+                if event.key == pygame.K_d: #Kontrollib kas sa liigud tahteust kiiremini pmst
+                    Pacman.changespeed(60, 0) # Ja aktiveerib sohi
+                    cheat = True # ning muudab cheat variable True'ks
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
@@ -489,6 +497,7 @@ def startGame():
                     Pacman.changespeed(0, 30)
                 if event.key == pygame.K_DOWN:
                     Pacman.changespeed(0, -30)
+
                 if event.key == pygame.K_w:
                     Pacman.changespeed(0, 60)
                 if event.key == pygame.K_s:
@@ -498,11 +507,6 @@ def startGame():
                 if event.key == pygame.K_d:
                     Pacman.changespeed(-60, 0)
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
-                    print("h")
-                    text1 = font.render("Ära Marcellota", True, red)
-                    screen.blit(text1, [200, 200])
 
         # Mängu loogika
         Pacman.update(wall_list, gate)
@@ -545,6 +549,14 @@ def startGame():
         gate.draw(screen)
         all_sprites_list.draw(screen)
         monsta_list.draw(screen)
+        screen.blit(
+            pygame.font.Font(None, 32).render(f"Life Wasted: {int(time.time() - start_time)}", True,
+                                                         [50, 255, 255]),
+            [430, 613])  # show time elapsed
+        # Kui cheatid paneb ekraanile teksti
+        if cheat:
+            text1 = font.render("Ära Marcellota", True, red)
+            screen.blit(text1, [200, 200])
 
         # Toob skoori välja
         text = font.render("Score: " + str(score) + "/" + str(bll), True, red)
@@ -560,9 +572,27 @@ def startGame():
             doNext("Congratulations, you won!", 145)
 
         monsta_hit_list = pygame.sprite.spritecollide(Pacman, monsta_list, False)
-
+        # Kui Pac-Man läheb kummituste vastu
         if monsta_hit_list:
-            doNext("Game Over", 235)
+            done = True
+            gameover = True
+
+        pygame.display.flip()
+
+        clock.tick(10)
+    # sa kaotasid
+    while gameover:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    quit()
+                if event.key == pygame.K_RETURN:
+                    startGame()
+        # Paneb ekraanile kaotus pildi
+        dead = pygame.image.load("images/dead.png")
+        screen.blit(dead, (0, 0))
 
         pygame.display.flip()
 
@@ -575,7 +605,7 @@ def doNext(message, left):
         # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
