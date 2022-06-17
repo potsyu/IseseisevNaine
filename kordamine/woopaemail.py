@@ -1,7 +1,7 @@
 import smtplib # Impordib smtplib mooduli
 
 sender_email = "vikk.opilane@outlook.com" # Saatja e-maili aadress
-rec_email = "cosmii02@cosmii02.com" # küsib kasutajalt saaja e-maili
+rec_email = "bjornj955@gmail.com" # küsib kasutajalt saaja e-maili
 password = input(str("Please enter your password : ")) # küsib sisestatud parooli
 SUBJECT = input(str("Please enter subject : ")) # küsib sisestatud teema
 TEXT = input(str("Please enter body : ")) # küsib sisestatud sisu
